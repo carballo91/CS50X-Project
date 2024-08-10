@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-sm">
+    <form id="prescriptionForm" action="" method="post">
+        {{ form.hidden_tag() }}
+
+        {{ form.medicine.label(class_='form-label') }}
+        {{ form.medicine(class_='form-control') }}
+
+        {{ form.dose.label(class_='form-label') }}
+        {{ form.dose(class_='form-control') }}
+
+        {{ form.instructions.label(class_='form-label') }}
+        {{ form.instructions(class_='form-control') }}
+
+        {{ form.notes.label(class_='form-label') }}
+        {{ form.notes(class_='form-control') }}
+
+        {{ form.save(class_="btn btn-primary") }}
+        {{ form.submit(class_="btn btn-secondary", formnovalidate=True) }}
+
+    </form>
+    <div id="loading">Loading...</div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-header">
+                <tr>
+                    <th>Medicina</th>
+                    <th>Dosis</th>
+                    <th>Instrucciones</th>
+                    <th>Notas</th>
+                </tr>
+            </thead>
+            <tbody id="prescriptionTable">  
+            </tbody>
+        </table>
+    </div>
+    <div id="end"></div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                <strong>!</strong> {{ message }} <strong>!</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script nonce="{{ csp_nonce() }}">
+$(function() {
+    // Handler for .ready() called.
+    $('#prescriptionForm').on('submit',function(event){
+        event.preventDefault()
+        var buttonClicked = document.activeElement.getAttribute('name');
+        if (buttonClicked === 'save'){
+            $.ajax({
+                type:'POST',
+                url:'/consulta/crear_receta/{{ pid }}/{{ id }}',
+                data: $(this).serialize(),
+                beforeSend: function() {
+                            $('#loading').show();
+                        },
+                success: function (response) {
+                    //Make sure to delete this console log
+                    $('#end').empty()
+                    $('#prescriptionTable').append(
+                        `<tr>
+                            <td>${response.medicine}</td>
+                            <td>${response.dose}</td>
+                            <td>${response.instructions}</td>
+                            <td>${response.notes}</td>
+                        </tr>`
+                    );
+                    $('#medicine').val('');
+                    $('#dose').val('');
+                    $('#instructions').val('');
+                    $('#notes').val('');
+                    $('#end').append('<button class="btn btn-primary"><a href="{{ url_for("reports.prescription") }}">Finalizar</a></button>')
+
+                },
+                error: function(error){
+                    console.log(error);
+                },
+                complete: function(xhr,status){
+                    $('#loading').hide();
+                }
+
+            });
+        }
+
+        else if (buttonClicked === 'submit'){
+            
+            window.open('/reportes/generate_pdf/{{ id }}','_blank');
+        }
+    });
+});
+
+</script>
+{% endblock %}

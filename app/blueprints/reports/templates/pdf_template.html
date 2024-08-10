@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf.css') }}">
+    <style>
+        .rp {
+            text-align: center;
+        }
+        .rp p {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header clearfix">
+            <div class="img-container">
+                <img src="https://localhost/static/logo.jpg" alt="Logo">
+            </div>
+
+            <div class="img-container text-right">
+                <h1>CENTRO DE SALUD INTEGRAL</h1>
+                <h2>CARA SUCIA</h2>
+                <br>
+                <br>
+                <p>DR. WILBER OSWALDO AVILÉS<br>
+                UNIVERSIDAD DE EL SALVADOR<br>
+                MEDICO GENERAL<br>
+                J.V.P.M 17543</p>
+            </div>
+
+        </div>
+        <div class="info">
+            <div class="line">
+                <span>Nombre:</span>{{ data[0].PatientData.name }}     
+            </div>
+            <div class="line">
+                <span>Apellido:</span>{{ data[0].PatientData.last_name }}
+            </div>       
+            <div class="line">
+                <span>Edad:</span><span>{{ data[0].PatientData.age }}</span>
+                <span>Fecha:</span>{{ data[0].ConsultationData.date }}
+            </div>
+        </div>
+        <div class="rp">
+            <p>Rp /</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medicina</th>
+                        <th>Dosis</th>
+                        <th>Instrucciones</th>
+                        <th>Notas</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+               
+                    {% for d in data %}
+                        <tr>
+                            <td>{{ d.Prescription.medicine }}</td>
+                            <td>{{ d.Prescription.dose }}</td>
+                            <td>{{ d.Prescription.instructions }}</td>
+                            <td>{{ d.Prescription.notes }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <footer>
+        <div class="footer">
+            <p>2420-4111 70187995<br>
+            BARRIO EL PROGRESO #144 CARA SUCIA<br>
+            ATENCION MEDICA DE NIÑOS, JOVENES, ADULTOS Y ADULTOS MAYORES.<br>
+            ATENCION MEDICA LAS 24 HORAS</p>
+        </div>
+    </footer>
+</body>
+</html>

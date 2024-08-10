@@ -1,0 +1,10 @@
+{% extends "admin/master.html" %}
+
+{% block body %}
+<style nonce="{{ csp_nonce() }}">
+    a, a:hover {
+        color: white;
+    }
+</style>
+<button class="btn btn-primary"><a href="{{ url_for('main.index') }}">Ir a Pagina Principal</a></button>
+{% endblock %}

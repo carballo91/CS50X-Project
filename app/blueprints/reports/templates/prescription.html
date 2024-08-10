@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>Crear Receta</h1>
+</header>
+<div class="container-sm">
+
+    <audio id="notificationSound" src="{{ url_for('static', filename='notification.wav') }}" preload="auto"></audio>
+    <button class="btn btn-primary" id="prescriptionNotificationsButton">Mostrar Notificaciones</button>
+
+    <div id="prescriptionNotifications" class="table-responsive">
+        <table class="table table-hover" border="1" id="patientTable">
+            <thead class="table-header">
+                <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notification in notifications %}
+                <tr>
+                    <td>{{ notification.name }}</td>
+                    <td>{{ notification.last_name }}</td>
+                    <td>
+                        <form id="createPrescription" action="/consulta/crear_receta/{{ notification.patient_id }}/{{ notification.consultation_id }}" method="post">
+                            {{ button.hidden_tag() }}
+                            {{ button.submit }}
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                <strong>!</strong> {{ message }} <strong>!</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+
+<script defer nonce="{{ csp_nonce() }}">
+
+    document.addEventListener('DOMContentLoaded', function() {
+        //Function to open new tab when button clicked and removes button
+
+        let userInteracted = false;
+
+        document.addEventListener('click', () => {
+            userInteracted = true;
+        });
+        const socket = io();
+        const notificationSound = document.getElementById('notificationSound');
+        const patientTable = document.getElementById('patientTable');
+        
+        socket.on('patient', function(data) {
+            if (userInteracted) {
+                const notificationSound = document.getElementById('notificationSound');
+                notificationSound.play().catch(error => {
+                    console.error('Failed to play sound:', error);
+                });
+            }
+            showNotification(data);
+            $('#id').val(data.id)
+        });
+
+        function showNotification(data){
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${data.name}</td>
+                <td>${data.last_name}</td>
+                <td>
+                    <form id="createPrescription" action="/consulta/crear_receta/${data.patient_id}/${data.id}" method="post">
+                        {{ button.hidden_tag() }}
+                        {{ button.submit }}
+                    </form>
+                </td>
+            `;
+            
+            patientTable.appendChild(newRow);
+            
+        }
+
+        socket.on('connect', function() {
+            console.log('Connected to /notificaciones namespace');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from /notificaciones namespace');
+        });
+    })
+</script>
+
+{% endblock %}
+

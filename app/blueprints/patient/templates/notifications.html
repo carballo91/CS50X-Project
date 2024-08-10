@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>Notificaciones</h1>
+</header>
+<div class="container-sm">
+
+    <div id="patientData"></div>
+    <audio id="notificationSound" src="{{ url_for('static', filename='notification.wav') }}" preload="auto"></audio>
+    <button class="btn btn-primary" id="patientNotificationsButton">Mostrar Notificaciones</button>
+    <div class="table-responsive" id="patientNotifications">
+        <table class="table table-hover" border="1" id="patientTable">
+            <thead class="table-header">
+                <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Edad</th>
+                    <th>Direccion</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notification in notifications %}
+                <tr>
+                    <td>{{ notification.name }}</td>
+                    <td>{{ notification.last_name }}</td>
+                    <td>{{ notification.age }}</td>
+                    <td>{{ notification.address }}</td>
+                    <td>
+                        <form id="notificationForm" action="{{ url_for('patient.to_consultation_form',id=notification.patient_id) }}" method="post">
+                            {{ button.csrf_token }}
+                            {{ button.submit }}
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    
+        </table>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                <strong>!</strong> {{ message }} <strong>!</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+
+<script nonce= "{{ csp_nonce() }}">
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    let userInteracted = false;
+
+    document.addEventListener('click', () => {
+        userInteracted = true;
+    });
+    const socket = io();
+    const notificationSound = document.getElementById('notificationSound');
+    const patientTable = document.getElementById('patientTable');
+
+    const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+            storedNotifications.forEach(notification => {
+                showNotification(notification);
+            });
+
+    socket.on('new_patient', function(data) {
+        if (userInteracted) {
+            const notificationSound = document.getElementById('notificationSound');
+            notificationSound.play().catch(error => {
+                console.error('Failed to play sound:', error);
+            });
+        }
+        showNotification(data);
+    });
+
+    function showNotification(data){
+        const newRow = document.createElement('tr');
+        const sanitizedData = {
+            name: DOMPurify.sanitize(data.name),
+            last_name: DOMPurify.sanitize(data.last_name),
+            age: DOMPurify.sanitize(data.age),
+            address: DOMPurify.sanitize(data.address),
+        };
+
+        newRow.innerHTML = `
+            <td>${sanitizedData.name}</td>
+            <td>${sanitizedData.last_name}</td>
+            <td>${sanitizedData.age}</td>
+            <td>${sanitizedData.address}</td>
+            <td>
+                <form id="notificationForm" action="/paciente/formulario_consulta/${data.id}" method="post">
+                    {{ button.csrf_token }}
+                    {{ button.submit }}
+                </form>
+            </td>
+        `;
+        patientTable.appendChild(newRow);
+        //setTimeout(() => newRow.remove(), 5000); // Remove notification after 5 seconds
+    }
+
+
+    socket.on('connect', function() {
+        console.log('Connected to /notificaciones namespace');
+    });
+
+    socket.on('disconnect', function() {
+        console.log('Disconnected from /notificaciones namespace');
+    });
+})
+</script>
+
+{% endblock %}
+

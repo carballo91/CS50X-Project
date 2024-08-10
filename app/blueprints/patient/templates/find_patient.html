@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header>
+        <h1>Buscar Paciente</h1>
+    </header>
+    <div class="container-sm">
+
+        <form id="findPatientForm">
+            <div class="col-xl-5 col-lg-6 col-md-8">
+                <div class="row">
+                    {{ form.name.label(class_="col-sm-4 col-form-label col-form-label-sm") }}
+                    <div class="col-sm-8">
+                        {{ form.name(class_="form-control form-control-sm") }}
+                    </div>              
+                </div>
+                <div class="row">
+                    {{ form.last_name.label(class_="col-sm-4 col-form-label col-form-label-sm") }}
+                    <div class="col-sm-8">
+                        {{ form.last_name(class_="form-control form-control-sm") }}
+                    </div>              
+                </div>
+                <div class="right col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12">
+                    {{ form.submit(class_="btn btn-primary") }}
+                </div>
+            </div>            
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+        <table border="1" class="table table-hover">
+            <thead class="table-header">
+                <tr>
+                    <th scope="col" class="table-header">Nombres</th>
+                    <th scope="col" class="table-header">Apellidos</th>
+                    <th scope="col" class="table-header">Edad</th>
+                    <th scope="col" class="table-header">Direccion</th>
+                </tr>
+            <thead>
+            <tbody id="patient">
+
+            <tbody>
+        </table>
+        <div id="send"></div>
+        <div id="message"></div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                    <strong>!</strong> {{ message }} <strong>!</strong>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <script nonce="{{ csp_nonce() }}">
+        let find_patient_url = "{{ url_for('patient.find_patient') }}"
+    </script>
+    <script src="{{ url_for('static', filename='js/find_patient.js') }}"></script>
+{% endblock %}

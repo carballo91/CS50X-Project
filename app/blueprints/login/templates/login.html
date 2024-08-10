@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block nav %}
+{% endblock %}
+{% block content %} 
+<style nonce="{{ csp_nonce() }}">
+    body {
+        background: linear-gradient(90deg, #E0E53D, #E0C43D, #E08C3D);
+    }
+    .centered-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Full viewport height */
+        /*background-color: #f0f0f0; /* Body background color */
+    }
+
+    .centered-container form {
+        width: 300px; /* Adjust width as needed */
+        padding: 20px; /* Adjust padding as needed */
+        border: 1px solid #ccc; /* Example border */
+        background-color: var(--accent-color); /* Example background color */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example box shadow */
+    }
+</style>
+<div class="container-sm">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4 centered-container">
+          <form class="form-signin" method="POST" action="{{ url_for('login.log_in') }}">
+            {{ form.hidden_tag() }}
+            <h1 class="h3 mb-3 font-weight-normal text-center">Iniciar Sesion</h1>
+            <div class="form-group">
+              {{ form.username.label(class="sr-only form-label") }}
+              {{ form.username(class="form-control", placeholder="Username") }}
+              {% for error in form.username.errors %}
+                <div class="warning">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              {{ form.password.label(class="sr-only") }}
+              {{ form.password(class="form-control", placeholder="Password") }}
+              {% for error in form.password.errors %}
+                <div class="warning">{{ error }}</div>
+              {% endfor %}
+            </div>
+            {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category,message in messages %}
+                <div class="{{ category }}">
+                  <strong>!</strong> {{ message }} <strong>!</strong>
+                </div>       
+                {% endfor %}
+            {% endif %}
+          {% endwith %}
+          </form>
+
+        </div>
+      </div>
+</div>
+{% endblock %}

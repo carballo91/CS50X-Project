@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+    <div class="container-lg">
+        <div class="col-lg-4 col-md-4">
+            <div>
+                <input class="btn btn-primary" type="button" id="divForm1" value="Filtrar por mes y año">
+                <form id="form1" action="" novalidate>
+                    {{ form.month.label(class_='form-label') }} {{ form.month(class_='form-control') }}
+                    {{ form.year.label(class_='form-label') }} {{ form.year(class_='form-control') }}
+                    {{ form.filter(class_='btn btn-primary') }}
+                </form>
+            </div>
+            <div>
+                <input class="btn btn-primary" type="button" id="divForm2" value="Filtar por año">
+                <form id="form2" action="" novalidate>
+                    {{ year_form.year1.label(class_='form-label') }} {{ year_form.year1(class_='form-control') }}
+                    {{ year_form.filter(class_='btn btn-primary') }}
+                </form>
+            </div>
+        </div>
+
+
+
+
+        {% if month and year %}
+            <h1>Reportes - {{ month }} de {{ year }}</h1>
+        {% elif year %}
+            <h1>Reportes - {{ year }}</h1>
+        {% else %}
+            <h1>Todos los reportes</h1>
+        {% endif %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle table-success table-striped">
+                <thead class="table-header">
+                    <tr>
+                        <th>Medicina</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body">
+                    {% for r in reports %} 
+                        <tr>
+                            <td>{{ r.medicine }}</td>
+                            <td>{{ r.count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td>{{ total }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                    <strong>!</strong> {{ message }} <strong>!</strong>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+    </div>
+    <script nonce="{{ csp_nonce() }}">
+        $(document).ready(function() {
+
+            let div1 = $('#divForm1')
+            let div2 = $('#divForm2')
+            let form1 = $('#form1')
+            let form2 = $('#form2')
+
+            form1.hide()
+            form2.hide()
+            //Make a function so we dont repeat the following lines of code to show and hide forms
+            div1.on('click',function(){
+                form1.show('slow')
+                form2.hide('slow')
+            })
+            div2.on('click',function(){
+                form2.show('slow')
+                form1.hide('slow')
+            })     
+
+            function datepick(selector,format,view){
+                $(selector).datepicker({
+                    format: format,
+                    
+                    minViewMode: view,
+                    maxViewMode: view,
+                    autoclose: true,
+                    language: 'es'
+                });
+            }
+            month = $('#month')
+            year = $('#year')
+            year1 = $('#year1')
+            datepick(month,'mm','months')
+            datepick(year,'yyyy','years')
+            datepick(year1,'yyyy','years')
+        });
+
+    </script>
+{% endblock %}

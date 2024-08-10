@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>Consultar Expediente</h1>
+</header>
+    <div class="container-lg">
+
+        <form id="fileForm">
+            <div class="col-xl-5 col-lg-6 col-md-8">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    {{ form.name.label(class_="col-sm-4 col-form-label col-form-label-sm") }}
+                    <div class="col-sm-8">
+                        {{ form.name(class_="form-control form-control-sm") }}
+                    </div>   
+                </div> 
+                <div class="row">
+                    {{ form.last_name.label(class_="col-sm-4 col-form-label col-form-label-sm") }}
+                    <div class="col-sm-8">
+                        {{ form.last_name(class_="form-control form-control-sm") }}
+                    </div>              
+                </div>
+                <div class="right col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12">
+                    {{ form.submit(class_="btn btn-primary") }}
+                </div>
+            </div>
+
+        </form>
+            {% if consultation %}
+                {% for c, medicines, doses, instructions in consultation.items %}
+                    {% set medicine_list = medicines.split(', ') %}
+                    {% set dose_list = doses.split(', ') %}
+                    {% set instructions_list = instructions.split(', ') %}
+                    <div class="col-md-12 centered">
+                        <div class="consultation-container col-md-6">
+                            <div class="consultation-item"><div class="consultation-header"><h6>Fecha</h6></div><p>{{ c.date|localize_datetime('America/El_Salvador','EEEE, d \'de\' MMMM \'de\' yyyy, H:mm:ss') }}</p></div>
+                            <div class="consultation-item"><h6>Altura</h6><p>{{ c.height }}</p></div>
+                            <div class="consultation-item"><h6>Peso</h6><p>{{ c.weight }}</p></div>
+                            <div class="consultation-item"><h6>IMC</h6><p>{{ c.imc }}</p></div>
+                            <div class="consultation-item"><h6>Temperatura</h6><p>{{ c.temperature }}</p></div>
+                            <div class="consultation-item"><h6>TA</h6><p>{{ c.ta }}</p></div>
+                            <div class="consultation-item"><h6>FR</h6><p>{{ c.fr }}</p></div>
+                            <div class="consultation-item"><h6>SAT</h6><p>{{ c.sat }}</p></div>
+                            <div class="consultation-item"><h6>FC</h6><p>{{ c.fc }}</p></div>
+                            <div class="consultation-item"><h6>Historial Médico</h6><p>{{ c.clinic_history }}</p></div>
+                            <div class="consultation-item"><h6>Records Médicos</h6><p>{{ c.medical_records }}</p></div>
+                            <div class="consultation-item"><h6>Exámenes Físicos</h6><p>{{ c.physical_exam }}</p></div>
+                            <div class="consultation-item"><h6>Exámenes de Laboratio</h6><p>{{ c.lab_exams }}</p></div>
+                            <div class="consultation-item"><h6>Diagnóstico</h6><p>{{ c.diagnostic }}</p></div>
+                            <div class="consultation-item"><h6>Plan Médico</h6>{% for i in range(medicine_list|length) %}<p><b>Medicina:</b> {{ medicine_list[i] }}
+                                <b>Dosis:</b> {{ dose_list[i] }}
+                                <b>Instrucciones:</b> {{ instructions_list[i] }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+
+
+
+ 
+        {% if consultation %}
+            <div class="pagination">
+                {% if consultation.has_prev %}
+                    <a href="{{ url_for('consultation.consult_file', page=consultation.prev_num,name=name,last_name=last_name) }}">Atras</a>
+                {% endif %}
+                
+                {% for page_num in consultation.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num == consultation.page %}
+                            <strong>{{ page_num }}</strong>
+                        {% else %}
+                            <a href="{{ url_for('consultation.consult_file', page=page_num,name=name,last_name=last_name) }}">{{ page_num }}</a>
+                        {% endif %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
+                
+                {% if consultation.has_next %}
+                    <a href="{{ url_for('consultation.consult_file', page=consultation.next_num,name=name,last_name=last_name) }}">Siguiente</a>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                    <strong>!</strong> {{ message }} <strong>!</strong>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+
+    
+    <style nonce="{{ csp_nonce() }}">
+    .centered {
+        margin: 10px auto;
+    }
+    .consultation-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: var(--accent-color);
+    }
+    
+    .consultation-item {
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        text-align: left;
+    }
+    .consultation-item > p {
+        margin: 0;
+    }
+    </style>
+    <!--<script nonce="{{ nonce }}">
+        $(document).ready(function() {
+            $('form').on('submit',function(event){
+                event.preventDefault()
+                let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                console.log(timezone)
+                $.ajax({
+                    url: "/consulta/consulta_expediente",
+                    type: "POST",
+                    contentType: "application/json;odata=verbose",
+                    data: JSON.stringify({ timezone: timezone }),
+                    success: function(response) {
+                        console.log("Timezone sent successfully:", response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error sending timezone:", error);
+                    }
+                });
+            })
+
+        });*/-->
+    </script>
+
+
+{% endblock %}

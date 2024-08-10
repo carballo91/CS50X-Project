@@ -1,0 +1,245 @@
+
+:root {
+  --primary-color: #D4C558;
+  --secondary-color: #556B2F;
+  --accent-color: #8FBC8F;
+  --light-bg: #F7F7F7;
+  --dark-bg: #2E2E2E;
+  --text-color: #333333;
+  --success-color: #4CAF50;
+  --warning-color: #FFC107;
+  --danger-color: #F44336;
+  --header:rgba(212, 197, 88,.2)
+}
+.table{
+  --bs-table-bg: none !important; /* Custom background color for the table */
+} 
+.success {
+  background-color: var(--success-color);
+}
+.warning {
+  background-color: var(--warning-color);
+}
+.danger {
+  background-color: var(--danger-color);
+
+}
+
+.success, .warning, .danger {
+  padding: 10px;
+  margin: 10px auto;
+  text-align: center;
+  border-radius: 20px;
+}
+
+#administrator-panel {
+  position: absolute;
+  right: 0;
+}
+
+
+.pagination > a, .pagination > strong {
+  margin: 20px 2px;
+  color: var(--text-color);
+}
+
+#patientNotifications, #prescriptionNotifications {
+  display: none;
+}
+
+body {
+  background-color: var(--light-bg);
+}
+
+.active-link {
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
+}
+
+p,td,label {
+  font-size: 12px;
+}
+header {
+  padding: 50px 0;
+  margin-bottom: 50px;
+  background-color: var(--header);
+}
+
+h1 {
+  color: var(--secondary-color) !important;
+}
+p, td, label, input, input:autofill, input:-webkit-autofill {
+  color: #556B2F !important;
+}
+h1 {
+  text-align: center;
+}
+input {
+  display: block;
+}
+
+input, button[type=button] {
+  margin: 10px 0 !important;
+}
+
+button > a {
+  text-decoration: none;
+}
+
+input[type=submit], button[type=button], button, input[type=button] {
+  background-color: var(--primary-color) !important;
+}
+
+input[type=submit]:hover, button[type=button]:hover, button:hover,input[type=button]:hover {
+  background: linear-gradient(90deg, #E0E53D, #E0C43D, #E08C3D);
+}
+
+input[type=submit], input[type=submit]:hover,button, button>a {
+  color: var(--text-color) !important;
+}
+
+nav {
+  background-color: var(--secondary-color);
+  /*background: linear-gradient(90deg,#156A2A, #556B2F);*/
+}
+nav li {
+  margin: 0 10px;
+}
+nav a, th{
+  color: var(--light-bg) !important;
+  padding: 10px !important;
+}
+
+nav a:hover {
+  background-color: var(--accent-color);
+}
+th {
+  vertical-align: middle;
+}
+
+.table-responsive {
+  clear: both;
+}
+
+.right {
+  float: right;
+}
+form {
+  overflow: hidden;
+}
+#findPatientForm input[type=submit], #notificationForm input[type=submit],
+#overFlow button[type=button], #createPrescription input[type=submit], #fileForm input[type=submit] {
+  width: 100%;
+}
+.row {
+  align-items: center;
+}
+#loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: #333;
+}
+.img-container {
+    height: 400px;
+    margin-top: 10%;
+}
+
+.logo {
+    height: 100%;
+    margin: 0 auto;
+}
+
+#logo {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+table {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+.table-header {
+    margin: 0 auto;
+    background-color: var(--secondary-color);
+}
+
+/* for consultation form
+/* Style the form */
+#regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    padding: 40px;
+    width: 70%;
+    min-width: 300px;
+  }
+  
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+  
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+  
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+  
+  /* Mark the active step: */
+  .step.active {
+    opacity: 1;
+  }
+  
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #04AA6D;
+  }
+
+  #overFlow {
+    overflow: auto;
+  }
+
+  #fltRight {
+    float: right;
+  }
+
+  #steps {
+    text-align:center;
+    margin-top:40px;
+  }
+
+  #error {
+    display: block;
+    margin: 0 auto;
+    height: 100vh !important;
+  }
+
+  @media screen and (max-width: 1200px) {
+    #administrator-panel {
+      position: relative;
+    }
+    
+  }
+
+  @media screen and (max-width: 413px) {
+    .consultation-container {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+  }

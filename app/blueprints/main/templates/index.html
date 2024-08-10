@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-sm">
+    <div class="container img-container">
+        <div class="col-md-6 logo">
+            <img id="logo" src="static/logo.jpg" alt="">
+        </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="{{ category }} col-lg-4 col-md-4" role="alert">
+                <strong>!</strong> {{ message }} <strong>!</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}
