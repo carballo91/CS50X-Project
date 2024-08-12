@@ -1,5 +1,5 @@
 # DocEase
-
+#### Video Demo: https://www.youtube.com/watch?v=h-VLDQ51kmU
 ## Overview
 This web application is designed to manage patient information, consultations, prescriptions, sends real time notifications to fill out new consultation form as well as prescription form for patients. It also generates a pdf file with the medicines prescribed and it keeps a report of the medicines prescribed. This web application has an administrator panel where you can add new users with two roles: admin or user. This application is meant to be used in a local environment.
 
