@@ -8,7 +8,7 @@ This web application is designed to manage patient information, consultations, p
 The project is organized into several key files and directories, each serving a specific purpose within the application:
 
 ### 1. `app/`
-The core of the Clinica application resides in the `app/` directory, which is structured as follows:
+The core of the application resides in the `app/` directory, which is structured as follows:
 
 - **`__init__.py`**: This file initializes the Flask application, setting up configurations, registering blueprints, and managing application context. It is the entry point for the app's various components, ensuring they work together seamlessly.
 
@@ -29,14 +29,14 @@ The `config.py` file stores configuration settings for the Flask application. Th
 The `errors.py` file handles custom error pages and error-handling logic within the application. When an error occurs (such as a 404 Not Found or 500 Internal Server Error), `errors.py` defines how the application responds, ensuring users receive informative and user-friendly error messages.
 
 ### 4. `requirements.txt`
-The `requirements.txt` file lists all the Python packages and dependencies needed to run the Clinica application. These dependencies include Flask, SQLAlchemy, Flask-WTF, and any other libraries the application relies on. By including a `requirements.txt` file, the environment can be easily replicated by installing the necessary packages using `pip`.
+The `requirements.txt` file lists all the Python packages and dependencies needed to run the application. These dependencies include Flask, SQLAlchemy, Flask-WTF, and any other libraries the application relies on. By including a `requirements.txt` file, the environment can be easily replicated by installing the necessary packages using `pip`.
 
 ### 5. `run.py`
 The `run.py` file is the entry point for starting the Flask application. Running this file launches the web server and initializes the application, making it accessible through a web browser. It typically includes commands to set up the environment and run the Flask app in debug or production mode.
 
 ## Design Choices
 
-During the development of the Clinica application, several design decisions were made to ensure the application is robust, maintainable, and secure:
+During the development of the application, several design decisions were made to ensure the application is robust, maintainable, and secure:
 
 ### Modular Structure with Blueprints
 The decision to use Flask blueprints was driven by the need to keep the application modular and organized. By separating different functionalities into distinct blueprints, the application is easier to maintain, extend, and debug. This structure also allows for the independent development of each module, promoting better code organization.
@@ -46,7 +46,7 @@ Flask-WTF was chosen for form handling due to its powerful validation and securi
 
 ## Installation
 
-To set up and run the Clinica web application on your local machine, follow these steps:
+To set up and run the web application on your local machine, follow these steps:
 
 ### Prerequisites
 
