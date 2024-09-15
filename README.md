@@ -87,6 +87,7 @@ pip install -r requirements.txt
 ### Step 4: Configure the Application
 
 You may need to modify the database URI, Secret Key, Admin Password and other settings to match your local setup.
+Make sure to replace ip for your computer ip where the server is running in the CORS configuration.
 
 ### Step 5: Initialize the Database
 
