@@ -50,7 +50,7 @@ def create_app(config_name='production'):
     session.init_app(app)
     babel.init_app(app)
     csrf.init_app(app)
-    CORS(app,origins=[f"http://192.168.1.101"])
+    CORS(app,origins=[f"http://{{ip_where_server_is_running}}"])
     migrate.init_app(app, db)
     socketio.init_app(app)
 
